@@ -124,20 +124,14 @@ princesa
 
 def read_password_files(filenames):
     """ 
-    Return a list of passwords in all the password file(s), plus 
-    a proportional (according to parameter q) number of "noise" passwords.
+    Return a list of passwords in all the password listed above (100 total)
     """
     pw_list = [ ]
-    for filename in filenames:
-        if sys.version_info[0] == 3:
-            lines = open(filename,"r",errors='ignore').readlines()
-        else:
-            lines = open(filename,"r").readlines()
-        for line in lines:
-            pw_list.extend( line.split() )
-
-    pw_list.extend( noise_list(int(q*len(pw_list))) )
+    lines = high_probability_passwords.split()
+    for line in lines:
+        pw_list.extend( line.split() )
     return pw_list
+
 
 def random_with_3_digits(n):
     """
@@ -147,13 +141,18 @@ def random_with_3_digits(n):
     range_end = (10**n)-1
     return randint(range_start, range_end)
 
-def append_digits(list):
+def append_digits1(list):
     new_pw_list = [ ]
     for pw in list:
         number = random_with_3_digits(3)
         pw = pw + str(number)
         new_pw_list.extend( pw.split() )
     return new_pw_list
+
+def append_digits2(string):
+    number = random_with_3_digits(3)
+    string = string + str(number)
+    return string
 
 # def syntax(p):
 #     """
@@ -174,62 +173,29 @@ def append_digits(list):
 #         return True
 #     return False
 
-def make_password(new_pw_list):
+def make_password(element):
     """ 
     make a random password like those in given password list
     """
-    if random.random() < tn:
-        return tough_nut()
     # start by choosing a random password from the list
     # save its length as k; we'll generate a new password of length k
-    k = len(random.choice(new_pw_list))
+    #k = len(random.choice(pw_list))
     # create list of all passwords of length k; we'll only use those in model
-    L = [ pw for pw in new_pw_list if len(pw) == k ]
-    nL = len(L)
-    # start answer with the first char of that random password
-    # row = index of random password being used 
-    row = random.randrange(nL)
-    offset =k-3 
-    ans = L[row][:offset]           # copy first char of newly-added 3 digits of L[row] 
-    j = 1                             # j = len(ans) invariant
-    while offset < k:                      # build up ans char by char
-        p = random.random()           # randomly decide what to do next, based on p
-        # # # here p1 = prob of action 1
-        # # #      p2 = prob of action 2
-        # # #      p3 = prob of action 3
-        # # #      p1 + p2 + p3 = 1.00
-        # # if p<p1:
-        # #     action = "action_1"
-        # # elif p<p1+p2:
-        # #     action = "action_2"
-        # # else:
-        # #     action = "action_3"
-        # if action == "action_1":
-            # add same char that some random word of length k has in this position
-        row = random.randrange(nL)
-        ans = ans + L[row][j]
-        j = j+1
-        offset = offset + 1
-        # elif action == "action_2":
-        #     # take char in this position of random word with same previous char
-        #     LL = [ i for i in range(nL) if L[i][j-1]==ans[-1] ]
-        #     row = random.choice(LL)
-        #     ans = ans + L[row][j]
-        #     j = j + 1
-        # elif action == "action_3":
-        #     # stick with same row, and copy another character
-        #     ans = ans + L[row][j]
-        #     j = j + 1
-    if (nL > 0 or nD > 0 or nS > 0) and not syntax(ans): 
-        return make_password(pw_list)
-    return ans
+    ans_list = [ ]
+    original_string = element
+    for e in range(10):
+        original_string = append_digits2(original_string)
+        ans_list.extend(original_string.split())
+        original_string = element
+    return ans_list
 
- def generate_passwords( n, pw_list ):
-    """ print n passwords and return list of them """
+def generate_passwords(new_pw_list):
+    """print n passwords and return list of them """
     ans = [ ]
-    for t in range( n ):
-        new_pw = make_password(new_pw_list)
-        ans.append( new_pw )
+    for k in range(len(new_pw_list)):
+        element = new_pw_list[k]
+        new_pw = make_password(element)
+        ans.append(new_pw)
     return ans
 
 def main():
@@ -237,12 +203,13 @@ def main():
     if len(sys.argv) > 1:
         n = int(sys.argv[1])
     else:
-        n = 10
+        n = 11
     # read password files
     filenames = sys.argv[2:]           # skip "gen.py" and n   
     pw_list = read_password_files(filenames)
+    new_pw_list = append_digits1(pw_list)
     # generate passwords
-    new_passwords = generate_passwords(n,pw_list)
+    new_passwords = generate_passwords(new_pw_list)
     # shuffle their order
     random.shuffle(new_passwords)
     # print if desired
@@ -255,9 +222,3 @@ def main():
 # cProfile.run("main()")
 
 main()
-
-
-
-
-
-
