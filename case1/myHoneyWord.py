@@ -53,6 +53,7 @@ soccer
 anthony
 friends
 butterfly
+purple
 angel
 jordan
 liverpool
@@ -149,29 +150,22 @@ def append_digits1(list):
         new_pw_list.extend( pw.split() )
     return new_pw_list
 
+def write_into_file1(file_list):
+    f = open('true_password', 'w')
+    for item in file_list:
+        f.write("%s\n" % item)
+    f.close()
+
+def write_into_file2(file_list):
+    f = open('honey_password', 'w')
+    for item in file_list:
+        f.write("%s\n" % item)
+    f.close()
+
 def append_digits2(string):
     number = random_with_3_digits(3)
     string = string + str(number)
     return string
-
-# def syntax(p):
-#     """
-#     Return True if the last three chars in password p contains 3 digits
-#     """
-#     global nL, nD, nS
-#     L = 0
-#     D = 0
-#     S = 0
-#     for c in p:
-#         if c in string.ascii_letters:
-#             L += 1
-#         elif c in string.digits:
-#             D += 1
-#         else:
-#             S += 1
-#     if L >= nL and D >= nD and S >= nS:
-#         return True
-#     return False
 
 def make_password(element):
     """ 
@@ -189,11 +183,11 @@ def make_password(element):
         original_string = element
     return ans_list
 
-def generate_passwords(new_pw_list):
+def generate_passwords(pw_list):
     """print n passwords and return list of them """
     ans = [ ]
-    for k in range(len(new_pw_list)):
-        element = new_pw_list[k]
+    for k in range(len(pw_list)):
+        element = pw_list[k]
         new_pw = make_password(element)
         ans.append(new_pw)
     return ans
@@ -208,15 +202,18 @@ def main():
     filenames = sys.argv[2:]           # skip "gen.py" and n   
     pw_list = read_password_files(filenames)
     new_pw_list = append_digits1(pw_list)
+    write_into_file1(new_pw_list)
     # generate passwords
-    new_passwords = generate_passwords(new_pw_list)
+    new_passwords = generate_passwords(pw_list)
+
+    write_into_file2(new_passwords)
     # shuffle their order
     random.shuffle(new_passwords)
     # print if desired
     printing_wanted = True
-    if printing_wanted:
-        for pw in new_passwords:
-            print (pw)
+    # if printing_wanted:
+    #     for pw in new_passwords:
+    #         print (pw)
 
 # import cProfile
 # cProfile.run("main()")
