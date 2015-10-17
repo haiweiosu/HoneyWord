@@ -244,7 +244,7 @@ def make_password(pw_list):
     return ans
     
 def generate_passwords( n, pw_list ):
-    """ print n passwords and return list of them """
+    """ print n passwords for each true password in the new_pw_list and return list of them """
     ans = [ ]
     for t in range( n ):
         pw = make_password(pw_list)
