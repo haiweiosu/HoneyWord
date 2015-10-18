@@ -167,7 +167,7 @@ def append_digits2(string):
     string = string + str(number)
     return string
 
-def make_password(element):
+def make_password(element, user_input):
     """ 
     make a random password like those in given password list
     """
@@ -177,34 +177,33 @@ def make_password(element):
     # create list of all passwords of length k; we'll only use those in model
     ans_list = [ ]
     original_string = element
-    for e in range(10):
+    for e in range(user_input):
         original_string = append_digits2(original_string)
         ans_list.extend(original_string.split())
         original_string = element
     return ans_list
 
-def generate_passwords(pw_list):
+def generate_passwords(pw_list, number):
     """print n passwords and return list of them """
     ans = [ ]
     for k in range(len(pw_list)):
         element = pw_list[k]
-        new_pw = make_password(element)
+        new_pw = make_password(element, number)
         ans.append(new_pw)
     return ans
 
 def main():
     # get number of passwords desired
-    if len(sys.argv) > 1:
-        n = int(sys.argv[1])
-    else:
-        n = 11
+    print "Enter number of sweetword you'd like to generate: ",
+    sweetword_number = raw_input()
+    user_input = int(sweetword_number)
     # read password files
     filenames = sys.argv[2:]           # skip "gen.py" and n   
     pw_list = read_password_files(filenames)
     new_pw_list = append_digits1(pw_list)
     write_into_file1(new_pw_list)
     # generate passwords
-    new_passwords = generate_passwords(pw_list)
+    new_passwords = generate_passwords(pw_list, user_input)
 
     write_into_file2(new_passwords)
     # shuffle their order
