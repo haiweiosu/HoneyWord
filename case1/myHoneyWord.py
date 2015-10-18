@@ -16,6 +16,8 @@ import random
 import sys
 import string
 from random import randint
+from itertools import izip
+
 
 # A short list of high-probability passwords that is used to initialize the
 # password list in case no password files are provided. Password source: 
@@ -156,11 +158,16 @@ def write_into_file1(file_list):
         f.write("%s\n" % item)
     f.close()
 
-def write_into_file2(file_list):
+def write_into_file2(file_list1):
     f = open('honey_password', 'w')
-    for item in file_list:
-        f.write("%s\n" % item)
+    for finallist in file_list1:
+        f.write("%s\n" % finallist)
     f.close()
+
+def combine_files (filename1, filename2):
+    with open('finaloutput', 'w') as res, open(filename1) as f1, open(filename2) as f2:
+        for line1, line2 in zip(f1, f2):
+            res.write("{} {}\n".format(line1.rstrip(), line2.rstrip()))
 
 def append_digits2(string):
     number = random_with_3_digits(3)
@@ -197,6 +204,7 @@ def main():
     print "Enter number of sweetword you'd like to generate: ",
     sweetword_number = raw_input()
     user_input = int(sweetword_number)
+    user_input = user_input - 1
     # read password files
     filenames = sys.argv[2:]           # skip "gen.py" and n   
     pw_list = read_password_files(filenames)
@@ -204,15 +212,12 @@ def main():
     write_into_file1(new_pw_list)
     # generate passwords
     new_passwords = generate_passwords(pw_list, user_input)
+    # combine_files(new_pw_list, new_passwords)
 
     write_into_file2(new_passwords)
-    # shuffle their order
-    random.shuffle(new_passwords)
-    # print if desired
-    printing_wanted = True
-    # if printing_wanted:
-    #     for pw in new_passwords:
-    #         print (pw)
+    filename1 = "true_password"
+    filename2 = "honey_password"
+    combine_files(filename1, filename2)
 
 # import cProfile
 # cProfile.run("main()")
