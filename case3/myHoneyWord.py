@@ -7,8 +7,8 @@ passwords = []
 def parse_dataset(input_file):
     """
     Parse passwords from dataset and remove frequency count
-    Expects file of form "$FREQUENCY $PASSWORD\n"
-    Warning: Takes ~15 sec as the dataset is huge
+    If file of form "$FREQUENCY $PASSWORD\n", keep only password
+    Warning: Takes ~15 sec for the full rockyou dataset
     """
     passwords = [line.rstrip('\n') for line in open(input_file)]
     passwords = [line.split()[1] if len(line.split()) > 1 else line.split()[0] for line in passwords]
@@ -63,7 +63,7 @@ def main():
     inputf = sys.argv[2]
     outputf = sys.argv[3]
 
-    print 'Parsing the data'
+    print 'Parsing the data... (takes time for full RockYou set)'
     passwords = parse_dataset(inputf) # Parse input file
     print 'Generating honeywords and writing to file'
     write_into_file(generate_n_honeywords(passwords,n), outputf) # Generate n honeywords and write to output file
