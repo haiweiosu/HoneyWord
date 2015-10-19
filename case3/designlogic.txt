@@ -1,0 +1,6 @@
+In this case, the training set T is the full RockYou dataset.
+In order to generate hardly guessable passwords, we need a random component to be integrated.
+The algorithm implemented here is called chaffing-by-tail-tweaking, where we tweak the last 3 characters (or digits) of each password. When a character is found, we replace it with a random character (from the full alphabet, with a lower or upper case letter, i.e. 26*2=52 possibilities). When we instead find a digit, we replace it by a random digit from 0 to 9. For passwords with less than, or equal to, three in length, we rollback to the earlier algorithm from case 2 and append three random digits, effectively making it longer as well as random.
+Example: the password 'password1' generates honeywords such as 'passworsm4', 'passworDG8', or 'passworZv8'. It is still not too hard to remember for the user (only 3 characters/digits have changed from the original password), but there is a randomness factor added in.
+
+PS: Please note that the sample and output files included in this folder are only the top 100 RockYou passwords. Although this case has been designed and tested against the full dataset, for time and space efficiency, only the top 100 passwords are included in git.
