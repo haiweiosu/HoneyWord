@@ -1,5 +1,13 @@
-In this case, where T, the training set is the top 100 commonly used password from given resource. 
-Since the goal for honeyword is decreasing the guessing porbablity for attackers. A successful honeyword design is decrease the guessing probability to 1/n, where n is number of total password (1 true password and n-1 honeypassword associate with it.)
-The algorithm we used in this case is called Taking-a-Tail method. "This method is identical to the chaffing-by-tail-tweaking method except that the tail of the new password is now randomly chosen bu the system, and required when user is entering new password" Resrouce from : http://fac.ksu.edu.sa/sites/default/files/honeywordsmonaalshahrani.pdf
+Author: Haiwei Su 
+Date: 21/10/2015
+CS5435 Homework 3
+In this case, where T, the training set, is the top 100 commonly used password from given resource. 
+Since the goal for honeyword is decreasing the guessing probability for attackers, a successful honeyword design is decrease the guessing probability to 1/n, where n is number of total password (1 true password and n-1 honey password associated with it.)
+In this case, we divide our passwords into two categories. First one is all passwords containing at least one digit. The second group is all passwords containing only english letters as characters. 
+To handling the first group of passwords, we search the length of substring containing only numerical digit of a given password, can change it with random digit with the same length then stick back to the rest of part in the string. for example: given abc123, honeywords can be abc456, abc789, abc890, abc355 etc. 
+To handling the second group of passwords, we set up 3 subcases to generate the honeywords. We set up two probability threshold, and all three cases are chosen by random probability and check which probability range it falls in. 
+If it falls into the first subcase, where randomly capitalizes the position of character in the password. For example: iloveyou, its honeyword can be iLoveyou, ilOveyou etc
+If it falls into the second subcase, we set up a letter map, where each letter associates with an integer, and we randomly generate the gap that each character in the password should move. For example, if true password is apple, and gap is 1, then honeyword is bqqmf
+If it falls into the third subcase, we set up the most confusing letter map, such as 'o' -> '0', 'l' -> '1', 's' -> '$' etc. Then, we randomly generate the maximum number of letters(within the password length) we need to change, and within this max number, we randomly generate the position we wish to change, if the position is truly a confused letter, we will change it accordingly. 
 
-For example: the true password user initially entered is abc, then the algorithm we deigsned can randomly generted a 3 digit number appending to this initial password and called this as the valid (or true) password for user to log in. Since all the valid passwords are in the form of "initial password + 3 digit number", we can randomly generate n number of honeyword with only change the last 3 digit. Therefore, all sweetwords are all distinct and has the same password format. Therefore, it's very hard for attackers to guess it correctly. 
+
