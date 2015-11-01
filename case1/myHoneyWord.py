@@ -19,111 +19,15 @@ from random import randint
 from itertools import izip
 
 
-# A short list of high-probability passwords that is used to initialize the
-# password list in case no password files are provided. Password source: 
-#http://downloads.skullsecurity.org/passwords/rockyou-withcount.txt.bz2.
-high_probability_passwords = """
-123456
-12345
-123456789
-password
-iloveyou
-princess
-1234567
-rockyou
-12345678
-abc123
-nicole
-daniel
-babygirl
-monkey
-lovely
-jessica
-654321
-michael
-ashley
-qwerty
-11111
-iloveu
-000000
-michelle
-tigger
-sunshine
-chocolate
-password1
-soccer
-anthony
-friends
-butterfly
-purple
-angel
-jordan
-liverpool
-justin
-loveme
-fuckyou
-123123
-football
-secret
-andrea
-carlos
-jennifer
-joshua
-bubbles
-1234567890
-superman
-hannah
-amanda
-loveyou
-pretty
-basketball
-andrew
-angels
-tweety
-flower
-playboy
-hello
-elizabeth
-hottie
-tinkerbell
-charlie
-samantha
-barbie
-chelsea
-lovers
-teamo
-jasmine
-brandon
-666666
-shadow
-melissa
-eminem
-matthew
-robert
-danielle
-forever
-family
-jonathan
-987654321
-computer
-whatever
-dragon
-vanessa
-cookie
-naruto
-summer
-sweety
-spongebob
-joseph
-junior
-softball
-taylor
-yellow
-daniela
-lauren
-mickey
-princesa
-"""
+def parse_dataset(input_file):
+    """
+    Parse passwords from dataset and remove frequency count
+    If file of form "$FREQUENCY $PASSWORD\n", keep only password
+    """
+    with open(input_file) as myfile:
+        passwords = [line.rstrip('\n') for line in open(input_file)]
+        passwords = [line.split()[1] if len(line.split()) > 1 else line.split()[0] for line in passwords]
+    return passwords
 
 def read_password_files(filenames):
     """ 
@@ -200,18 +104,28 @@ def generate_passwords(pw_list, number):
     return ans
 
 def main():
+
+
+    # Return early if not enough args
+    if len(sys.argv) < 4:
+        print "Wrong number of arguments."
+        return
+
+    # Parse command-line arguments
+    n = int(sys.argv[1])
+    inputf = sys.argv[2]
+    outputf = sys.argv[3]
+
+    passwords = parse_dataset(inputf) # Parse input file
+
     # get number of passwords desired
-    print "Enter number of sweetword you'd like to generate: ",
-    sweetword_number = raw_input()
-    user_input = int(sweetword_number)
+    user_input = n
     user_input = user_input - 1
     # read password files
-    filenames = sys.argv[2:]           # skip "gen.py" and n   
-    pw_list = read_password_files(filenames)
-    new_pw_list = append_digits1(pw_list)
+    new_pw_list = append_digits1(passwords)
     write_into_file1(new_pw_list)
     # generate passwords
-    new_passwords = generate_passwords(pw_list, user_input)
+    new_passwords = generate_passwords(passwords, user_input)
     # combine_files(new_pw_list, new_passwords)
 
     write_into_file2(new_passwords)
